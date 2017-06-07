@@ -29,6 +29,7 @@ def make_mat(dic, mov):
     return P
 
 
+# 年代ごとに整理する関数
 def divide_age(P, user):
     age = np.zeros((10, 19))
     for (i, p) in enumerate(P):
@@ -37,6 +38,20 @@ def divide_age(P, user):
         age[age_num-1, :] += p
     return age
 
+
+# 類似ユーザの検索
+# ユーザごとのベクトルをユークリッド距離にて類似してるかを判断
+def similar_user(P, u_id):
+    u_vec = P[u_id-1, :]
+    val = float('inf')
+    for (i, p) in enumerate(P):
+        if u_id-1 == i:
+            continue
+        tmp = np.linalg.norm(u_vec - p)
+        if tmp < val:
+            val = tmp
+            vec = p
+    return u_vec, val, vec
 
 if __name__ == '__main__':
     data_path = "ml-100k/u.data"
@@ -55,5 +70,11 @@ if __name__ == '__main__':
 
         # 年代ごとに整理
         A = divide_age(P, user_dic)
-        print(A)
+        # print(A)
         # print(P[0, :])
+
+        # 類似するユーザの検索
+        u_vec, val, vec = similar_user(P, 1)
+        print(u_vec)
+        print(val)
+        print(vec)
