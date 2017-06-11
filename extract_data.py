@@ -40,22 +40,34 @@ class Extract_data:
         return age
 
 
+    # 縦: ユーザID, 横: 映画のID
+    def user_title(user, mov):
+        mat = np.zeros((len(user), len(mov)))
+        for usr in user:
+            for u in user[usr]:
+                mat[int(usr)-1][int(u[0])-1] = 1
+        return mat
+
 if __name__ == '__main__':
     data_path = "ml-100k/u.data"
     item_path = "ml-100k/u.item"
     user_path = "ml-100k/u.user"
 
     with open(data_path, 'r') as d, open(user_path, 'r') as u:
-        # データの配列
+        # データの配列{'ユーザID':[アイテムID, 評価, タイムスタンプ]}
         data_dic = Extract_data.collect_data(d, 4, "\t")
+        print(len(data_dic))
         # 映画のリスト
         mov_list = pd.read_csv('ml-100k/u.item', sep='|',
                                encoding='latin-1', header=None)
+        print(len(mov_list))
         # ユーザの情報の配列
         user_dic = Extract_data.collect_data(u, 5, "|")
         P = Extract_data.make_mat(data_dic, mov_list)
 
         # 年代ごとに整理
-        A = Extract_data.divide_age(P, user_dic)
+        # A = Extract_data.divide_age(P, user_dic)
 
-        print(A)
+        # ユーザが評価している映画を1, していないものを0とする行列の生成
+        mat = Extract_data.user_title(data_dic, mov_list)
+        print(mat)
