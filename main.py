@@ -52,7 +52,13 @@ if __name__ == "__main__":
         # 年代ごとに整理
         A = Extract_data.divide_age(P, user_dic)
 
+        # ユーザのもつ映画評価
+        M = Extract_data.user_title(user_dic, mov_list)
+
         # 類似するユーザの検索
-        u_vec, sim_id, vec = similar_user(P, input_id)
+        # ジャンルの蓄積情報のみを用いた場合
+        # u_vec, sim_id, vec = similar_user(P, input_id)
+        # ユーザのもつ映画評価を元に検索する場合
+        u_vec, sim_id, vec = similar_user(M, input_id)
 
         recommand(sim_id, data_dic, mov_list)
