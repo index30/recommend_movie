@@ -26,8 +26,11 @@ class Extract_data:
             # i_d = [アイテムID, 評価, タイムスタンプ]
             for i_d in dic[d]:
                 # 映画の情報をベクトル化
-                P[int(d)-1, :] += np.array(list(mov.iloc[int(i_d[0])-1,
-                                                              5:24]))*int(i_d[1])
+                tmp = mov.iloc[int(i_d[0])-1, 5:24]
+                tmp_val = list(map(str.isdigit, list(map(str, tmp))))
+                if all(tmp_val) and tmp_val[0] is True:
+                    P[int(d)-1, :] += np.array(list(mov.iloc[int(i_d[0])-1,
+                                                             5:24]))*int(i_d[1])
         return P
 
     # 年代ごとに整理する関数
