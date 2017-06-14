@@ -14,5 +14,5 @@ class User_base:
             if tmp < val:
                 val = tmp
                 vec = p
-                sim_id = i
+                sim_id = i+1
         return u_vec, sim_id, vec

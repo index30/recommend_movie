@@ -1,5 +1,4 @@
 import numpy as np
-from operator import itemgetter
 
 ITEMAX = 1682
 
@@ -29,12 +28,3 @@ class Item_base:
         index = np.argsort(target)[::-1]
         mov_pair = (sort_val[0], index[0])
         return mov_pair
-
-    # 最も選ばれる確率の高い映画の推薦
-    def recommend_title(dic, u_id, mat, mov):
-        u_dic = dic[str(u_id)]
-        rec_list = [Item_base.for_rec_table(mat, int(item[0])) for item in u_dic]
-        sort_list = sorted(rec_list, key=itemgetter(0))[::-1]
-        mov_num = sort_list[0][1]
-        arr = mov.iloc[mov_num, :]
-        print(arr[1])
