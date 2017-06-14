@@ -3,27 +3,13 @@
 # 仮定として、ユーザ登録されているレビュワーのみを対象
 # ユーザIDを入力することで、そのユーザにオススメの映画をレコメンドする
 from extract_data import Extract_data
+from user_base import User_base
+from item_base import Item_base
 import numpy as np
 import pandas as pd
 
 
 class Main:
-    # 類似ユーザの検索
-    # ユーザごとのベクトルを、ユークリッド距離を用いて類似してるか計算
-    def similar_user(P, u_id):
-        u_vec = P[u_id-1, :]
-        val = float('inf')
-        for (i, p) in enumerate(P):
-            if u_id-1 == i:
-                continue
-            tmp = np.linalg.norm(u_vec - p)
-            if tmp < val:
-                val = tmp
-                vec = p
-                sim_id = i
-        return u_vec, sim_id, vec
-
-
     # 映画のジャンルを出力
     def movie_genre(mov_list):
         genre = ["unknown", "action", "adventure", "animation", "children's",
@@ -63,19 +49,22 @@ if __name__ == "__main__":
                                encoding='latin-1', header=None)
         # ユーザの情報の配列
         user_dic = Extract_data.collect_data(u, 5, "|")
-        P = Extract_data.make_mat(data_dic, mov_list)
+        # P = Extract_data.make_mat(data_dic, mov_list)
 
         # 年代ごとに整理
-        A = Extract_data.divide_age(P, user_dic)
+        #A = Extract_data.divide_age(P, user_dic)
 
         # ユーザのもつ映画評価
-        M = Extract_data.user_title(user_dic, mov_list)
+        #M = Extract_data.user_title(user_dic, mov_list)
 
         # 類似するユーザの検索
         # ジャンルの蓄積情報のみを用いた場合
         # u_vec, sim_id, vec = similar_user(P, input_id)
         # ユーザのもつ映画評価を元に検索する場合
-        u_vec, sim_id, vec = Main.similar_user(M, input_id)
+        #u_vec, sim_id, vec = User_base.similar_user(M, input_id)
         # 映画推薦の出力部分
-        print("We recommend ...")
-        Main.recommand(input_id, sim_id, data_dic, mov_list)
+        #print("We recommend ...")
+        #Main.recommand(input_id, sim_id, data_dic, mov_list)
+
+        mat = Item_base.item_mat(data_dic)
+        Item_base.recommend_title(data_dic, input_id, mat, mov_list)
