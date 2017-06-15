@@ -1,7 +1,3 @@
-#!/usr/local/Cellar/python3/3.5.1/bin/python3.5
-
-# 仮定として、ユーザ登録されているレビュワーのみを対象
-# ユーザIDを入力することで、そのユーザにオススメの映画をレコメンドする
 from extract_data import Extract_data
 from user_base import User_base
 from item_base import Item_base
@@ -39,7 +35,6 @@ class Recommend:
         mov = list(map(int, mov_list[5:24]))
         m_genre = [g for (g,m) in zip(genre, mov) if m == 1]
         return m_genre
-
 
     # 類似ユーザを元に映画推薦
     def user_recommend(i_id, u_id, dic, mov):

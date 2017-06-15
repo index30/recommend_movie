@@ -2,16 +2,11 @@
 
 # 仮定として、ユーザ登録されているレビュワーのみを対象
 # ユーザIDを入力することで、そのユーザにオススメの映画をレコメンドする
-from extract_data import Extract_data
-from user_base import User_base
-from item_base import Item_base
 from recommend import Recommend
-import numpy as np
-import pandas as pd
-from operator import itemgetter
 import argparse
 
 
+# 実行部分、argparseを用いてユーザベースかアイテムベースかを区別
 class Main:
     def main():
         parser = argparse.ArgumentParser()

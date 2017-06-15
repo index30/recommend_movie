@@ -1,3 +1,4 @@
+# extract_data.pyのテストコード
 from extract_data import Extract_data
 import pandas as pd
 import numpy as np
@@ -23,7 +24,7 @@ def test_make_mat():
         mat = Extract_data.make_mat(c_data, mov_list)
         assert all(isinstance(x, np.float64) for x in list(mat[0]))
 
-
+# devide_ageが未実装のため省略
 def test_devide_age():
     pass
 
