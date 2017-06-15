@@ -1,5 +1,5 @@
 import pandas as pd
-from main import Main
+from recommend import Recommend
 from extract_data import Extract_data
 from user_base import User_base
 from item_base import Item_base
@@ -17,6 +17,6 @@ def test_movie_genre():
     mov_list = pd.read_csv('ml-100k/u.item', sep='|',
                            encoding='latin-1', header=None)
     mov = mov_list.iloc[0, :]
-    gen = Main.movie_genre(mov)
+    gen = Recommend.movie_genre(mov)
     for g in gen:
         assert g in genre
