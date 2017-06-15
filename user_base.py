@@ -2,7 +2,7 @@
 import numpy as np
 
 
-class User_base:
+class UserBase:
     # 類似ユーザの検索
     # ユーザごとのベクトルを、ユークリッド距離を用いて類似しているユーザを出力
     def similar_user(P, u_id):

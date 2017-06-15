@@ -5,7 +5,7 @@ ITEMAX = 1682
 
 # アイテムベースでのレコメンド
 # 評価に寄らず、アイテムの共起に着目
-class Item_base:
+class ItemBase:
     # 同一人物が購入した商品の組み合わせ
     def item_mat(dic):
         M = np.zeros((ITEMAX, ITEMAX))

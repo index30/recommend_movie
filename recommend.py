@@ -1,6 +1,6 @@
-from extract_data import Extract_data
-from user_base import User_base
-from item_base import Item_base
+from extract_data import ExtractData
+from user_base import UserBase
+from item_base import ItemBase
 import numpy as np
 import pandas as pd
 from operator import itemgetter
@@ -12,18 +12,18 @@ class Recommend:
         item_path = "ml-100k/u.item"
         user_path = "ml-100k/u.user"
         with open(data_path, 'r') as d, open(item_path, 'r') as i, open(user_path, 'r') as u:
-            d_dic = Extract_data.collect_data(d, 4, "\t")
+            d_dic = ExtractData.collect_data(d, 4, "\t")
             m_list = pd.read_csv('ml-100k/u.item', sep='|',
                                  encoding='latin-1', header=None)
-            u_dic = Extract_data.collect_data(u, 5, "|")
+            u_dic = ExtractData.collect_data(u, 5, "|")
             if args.item:
                 print("[Item-base recommend]")
-                mat = Item_base.item_mat(d_dic)
+                mat = ItemBase.item_mat(d_dic)
                 Recommend.item_recommend(d_dic, int(args.item[0]), mat, m_list)
             elif args.user:
                 print("[User-base recommend]")
-                M = Extract_data.user_title(u_dic, m_list)
-                u_vec, sim_id, vec = User_base.similar_user(M, int(args.user[0]))
+                M = ExtractData.user_title(u_dic, m_list)
+                u_vec, sim_id, vec = UserBase.similar_user(M, int(args.user[0]))
                 Recommend.user_recommend(int(args.user[0]), sim_id, d_dic, m_list)
 
     # 映画のジャンルを出力
@@ -55,7 +55,7 @@ class Recommend:
     # 最も選ばれる確率の高い映画の推薦
     def item_recommend(dic, u_id, mat, mov):
         u_dic = dic[str(u_id)]
-        rec_list = [Item_base.for_rec_table(mat, int(item[0])) for item in u_dic]
+        rec_list = [ItemBase.for_rec_table(mat, int(item[0])) for item in u_dic]
         sort_list = sorted(rec_list, key=itemgetter(0))[::-1]
         mov_num = sort_list[0][1]
         arr = mov.iloc[mov_num, :]
@@ -73,29 +73,29 @@ if __name__ == "__main__":
 
     with open(data_path, 'r') as d, open(item_path, 'r') as i, open(user_path, 'r') as u:
         # データの配列
-        data_dic = Extract_data.collect_data(d, 4, "\t")
+        data_dic = ExtractData.collect_data(d, 4, "\t")
         # 映画のリスト
         mov_list = pd.read_csv('ml-100k/u.item', sep='|',
                                encoding='latin-1', header=None)
         # ユーザの情報の配列
-        user_dic = Extract_data.collect_data(u, 5, "|")
+        user_dic = ExtractData.collect_data(u, 5, "|")
         # P = Extract_data.make_mat(data_dic, mov_list)
 
         # 年代ごとに整理
         #A = Extract_data.divide_age(P, user_dic)
 
         # ユーザのもつ映画評価
-        M = Extract_data.user_title(user_dic, mov_list)
+        M = ExtractData.user_title(user_dic, mov_list)
 
         # 類似するユーザの検索
         # ジャンルの蓄積情報のみを用いた場合
         # u_vec, sim_id, vec = similar_user(P, input_id)
         # ユーザのもつ映画評価を元に検索する場合
-        u_vec, sim_id, vec = User_base.similar_user(M, input_id)
+        u_vec, sim_id, vec = UserBase.similar_user(M, input_id)
         # 映画推薦の出力部分
         print("User-base recommend ...")
         Recommend.user_recommend(input_id, sim_id, data_dic, mov_list)
         print("")
         print("Item-base recommend...")
-        mat = Item_base.item_mat(data_dic)
+        mat = ItemBase.item_mat(data_dic)
         Recommend.item_recommend(data_dic, input_id, mat, mov_list)
