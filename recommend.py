@@ -8,23 +8,23 @@ from operator import itemgetter
 
 class Recommend:
     def recommend(args):
-        data_path = "ml-100k/u.data"
-        item_path = "ml-100k/u.item"
-        user_path = "ml-100k/u.user"
-        with open(data_path, 'r') as d, open(item_path, 'r') as i, open(user_path, 'r') as u:
-            d_dic = ExtractData.collect_data(d, 4, "\t")
-            m_list = pd.read_csv('ml-100k/u.item', sep='|',
-                                 encoding='latin-1', header=None)
-            u_dic = ExtractData.collect_data(u, 5, "|")
-            if args.item:
-                print("[Item-base recommend]")
-                mat = ItemBase.item_mat(d_dic)
-                Recommend.item_recommend(d_dic, int(args.item[0]), mat, m_list)
-            elif args.user:
-                print("[User-base recommend]")
-                M = ExtractData.user_title(u_dic, m_list)
-                u_vec, sim_id, vec = UserBase.similar_user(M, int(args.user[0]))
-                Recommend.user_recommend(int(args.user[0]), sim_id, d_dic, m_list)
+        data = ExtractData("ml-100k/u.data")
+        user = ExtractData("ml-100k/u.user")
+        d_dic = data.collect_data(4, "\t")
+        m_list = pd.read_csv('ml-100k/u.item', sep='|',
+                             encoding='latin-1', header=None)
+        if args.item:
+            print("[Item-base recommend]")
+            mat = ItemBase.item_mat(d_dic)
+            Recommend.item_recommend(d_dic, int(args.item[0]), mat, m_list)
+        elif args.user:
+            print("[User-base recommend]")
+            # 高速で簡素な検索をする場合
+            # M = user.genre_distribution(5, "|")
+            # 評価値を考えた検索をする場合
+            M = data.genre_eval(4, "\t")
+            u_vec, sim_id, vec = UserBase.similar_user(M, int(args.user[0]))
+            Recommend.user_recommend(int(args.user[0]), sim_id, d_dic, m_list)
 
     # 映画のジャンルを出力
     def movie_genre(mov_list):
@@ -32,7 +32,7 @@ class Recommend:
                  "comedy", "crime", "documentary", "drama", "fantasy", "film-noir",
                  "horror", "musical", "mystery", "romance", "sci-fi", "thriller",
                  "war", "western"]
-        mov = list(map(int, mov_list[5:24]))
+        mov = list(map(int, mov_list[5:]))
         m_genre = [g for (g,m) in zip(genre, mov) if m == 1]
         return m_genre
 
@@ -45,7 +45,7 @@ class Recommend:
         for u in u_dic:
             if count > 9:
                 continue
-            arr = np.array(list(mov.iloc[int(u[0])-1,:]))
+            arr = np.array(list(mov.iloc[int(u[0])-1, :]))
             if not u[0] in i_mov and int(u[1]) > 3:
                 print(arr[1] + " ... genre is", end='')
                 [print(" <" + g + ">", end='') for g in Recommend.movie_genre(arr)]

@@ -1,4 +1,4 @@
-#!/usr/local/Cellar/python3/3.5.1/bin/python3.5
+#!/usr/bin/env python3
 
 # 仮定として、ユーザ登録されているレビュワーのみを対象
 # ユーザIDを入力することで、そのユーザにオススメの映画をレコメンドする
