@@ -10,6 +10,8 @@ class ExtractData:
 
     # データを辞書型に集める
     # ex. {'ユーザ名': [[item1], [item2], ...]}
+    # 入力: cut...配列をカットする箇所, delim...区切り文字指定
+    # 出力: 辞書型に集められたデータ
     def collect_data(self, cut, delim):
         with open(self.data) as data, open(self.item) as item:
             lines = data.readlines()
@@ -24,6 +26,8 @@ class ExtractData:
 
     # 各ユーザのジャンルごとの評価総数行列
     # ジャンルごとの評価値を考慮した場合のメソッド
+    # 入力: cut...配列をカットする箇所, delim...区切り文字指定
+    # 出力: ユーザ(縦軸)と映画のジャンル(横軸)を示した行列
     def genre_eval(self, cut, delim):
         mov_list = pd.read_csv(self.item, sep='|',
                                encoding='latin-1', header=None)
