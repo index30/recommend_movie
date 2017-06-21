@@ -1,8 +1,6 @@
 import pandas as pd
 from recommend import Recommend
-from extract_data import Extract_data
-from user_base import User_base
-from item_base import Item_base
+
 
 data_path = "ml-100k/u.data"
 item_path = "ml-100k/u.item"

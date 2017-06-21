@@ -1,4 +1,4 @@
-from extract_data import ExtractData
+import extract_data
 from user_base import UserBase
 from item_base import ItemBase
 import numpy as np
@@ -12,9 +12,8 @@ class Recommend:
         self.user = args.user
 
     def recommend(self):
-        data = ExtractData("ml-100k/u.data")
-        user = ExtractData("ml-100k/u.user")
-        d_dic = data.collect_data(4, "\t")
+        d_dic = extract_data.collect_data("ml-100k/u.data", 4, "\t")
+        # u_dic = extract_data.collect_data("ml-100k/u.user", 5, "|")
         m_list = pd.read_csv('ml-100k/u.item', sep='|',
                              encoding='latin-1', header=None)
         if self.item:
@@ -24,9 +23,9 @@ class Recommend:
         elif self.user:
             print("[User-base recommend]")
             # 高速で簡素な検索をする場合
-            # M = user.genre_distribution(5, "|")
+            # M = extract_data.genre_distribution(u_dic, m_list)
             # 評価値を考えた検索をする場合
-            M = data.genre_eval(4, "\t")
+            M = extract_data.genre_eval(d_dic, m_list)
             u_vec, sim_id, vec = UserBase.similar_user(M, int(self.user[0]))
             Recommend.user_recommend(int(self.user[0]), sim_id, d_dic, m_list)
 
