@@ -48,8 +48,9 @@ class Recommend:
         for u in u_dic:
             if count > 9:
                 continue
-            arr = np.array(list(mov.iloc[int(u[0])-1, :]))
-            if not u[0] in i_mov and int(u[1]) > 3:
+            mov_id, rating = u[0], int(u[1])
+            arr = np.array(list(mov.iloc[int(mov_id)-1, :]))
+            if mov_id not in i_mov and rating > 3:
                 print(arr[1] + " ... genre is", end='')
                 [print(" <" + g + ">", end='') for g in Recommend.movie_genre(arr)]
                 print("")
